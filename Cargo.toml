@@ -3,10 +3,12 @@ name = "pillar"
 version = "0.1.0"
 authors = ["Ando \"Thor\" Nando <divinegod@gmail.com>"]
 edition = "2018"
+include = ["src/main.rs", "README.md"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+regex = "1.4.6"
 
 [target.'cfg(target_family = "unix")'.dependencies]
 nix = "0.20.0"
