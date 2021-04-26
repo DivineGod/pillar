@@ -26,13 +26,18 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let stdin = std::io::stdin();
     let in_handle = stdin.lock();
 
+    // Keep each processed line in a row, owning the data as the column (String) and the display width (usize)
+    // Display width is the width of the text as it will appear in a tty with colour support.
     let mut rows: Vec<Row> = Vec::new();
     let matcher = Regex::new(r"\{")?;
     let ansi_matcher = Regex::new(
         r"[\u001B\u009B][\[\]()#;?]*(?:(?:(?:[a-zA-Z\d]*(?:;[-a-zA-Z\d/#&.:=?%@~_]*)*)?\u0007)|(?:(?:\d{1,4}(?:;\d{0,4})*)?[\dA-PR-TZcf-ntqry=><~]))",
     )?;
+    // Keep a list of max column widths
     let mut col_widths: Vec<usize> = Vec::new();
     let pad_char = ' ';
+
+    // Process each incoming line and store the results in `rows`
     for line in in_handle.lines().map(|l| l.unwrap()) {
         let find_iter = matcher.split(&line);
         let mut cols = Vec::new();
@@ -49,6 +54,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         rows.push(Row { cols });
     }
 
+    // Display each row with correct column padding
     for row in rows {
         {
             let cols = row.cols;
