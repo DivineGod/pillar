@@ -1,28 +1,11 @@
 use regex::Regex;
-use std::io::{BufRead, Read};
-
-/// This should be called before calling any cli method or printing any output.
-pub fn reset_signal_pipe_handler() -> nix::Result<()> {
-    #[cfg(target_family = "unix")]
-    {
-        // SAFETY: Previous Handler is not invalid.
-        unsafe {
-            nix::sys::signal::signal(
-                nix::sys::signal::Signal::SIGPIPE,
-                nix::sys::signal::SigHandler::SigDfl,
-            )?;
-        }
-    }
-
-    Ok(())
-}
+use std::io::{self, BufRead, Write};
 
 struct Row {
     cols: Vec<(String, usize)>,
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    reset_signal_pipe_handler()?;
     let stdin = std::io::stdin();
     let in_handle = stdin.lock();
 
@@ -55,22 +38,30 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
     // Display each row with correct column padding
-    for row in rows {
+    let stdout = io::stdout();
+    let mut handle = stdout.lock();
+    'print: for row in rows {
         {
             let cols = row.cols;
             for (col_idx, (col, col_width)) in cols.into_iter().enumerate() {
                 let pad_width = col_widths[col_idx] - col_width;
-                print!("{}{}", col, {
+                match write!(handle, "{}{}", col, {
                     let mut padding: String = String::with_capacity(pad_width + 1);
                     for _ in 0..pad_width {
                         padding.push(pad_char);
                     }
                     padding.push(pad_char);
                     padding
-                });
+                }) {
+                    Err(_) => break 'print,
+                    _ => (),
+                };
             }
         }
-        print!("{}", '\n');
+        match write!(handle, "{}", '\n') {
+            Err(_) => break 'print,
+            _ => (),
+        };
     }
 
     Ok(())
