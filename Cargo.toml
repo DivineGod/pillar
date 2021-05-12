@@ -3,7 +3,17 @@ name = "pillar"
 version = "0.1.0"
 authors = ["Ando \"Thor\" Nando <divinegod@gmail.com>"]
 edition = "2018"
-include = ["src/main.rs", "README.md"]
+include = [ "src/main.rs", "README.md"]
+categories = ["command-line-utilities", "text-processing"]
+license = "Unlicense OR MIT"
+description = """
+pillar is a small tool to format lines into columns
+"""
+documentation = "https://github.com/DivineGod/pillar"
+homepage = "https://github.com/DivineGod/pillar"
+repository = "https://github.com/DivineGod/pillar"
+keywords = ["column", "tab", "table", "pad", "padding"]
+readme = "README.md"
 
 [[bin]]
 bench = false
