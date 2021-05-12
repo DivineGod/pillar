@@ -5,6 +5,11 @@ authors = ["Ando \"Thor\" Nando <divinegod@gmail.com>"]
 edition = "2018"
 include = ["src/main.rs", "README.md"]
 
+[[bin]]
+bench = false
+path = "src/main.rs"
+name = "pillar"
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]

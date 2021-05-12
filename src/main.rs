@@ -54,13 +54,13 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     padding
                 }) {
                     Err(_) => break 'print,
-                    _ => (),
+                    _ => {}
                 };
             }
         }
         match write!(handle, "{}", '\n') {
             Err(_) => break 'print,
-            _ => (),
+            _ => {}
         };
     }
 
