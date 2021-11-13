@@ -1,8 +1,8 @@
 [package]
 name = "pillar"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Ando \"Thor\" Nando <divinegod@gmail.com>"]
-edition = "2018"
+edition = "2021"
 include = [ "src/main.rs", "README.md"]
 categories = ["command-line-utilities", "text-processing"]
 license = "Unlicense OR MIT"
