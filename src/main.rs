@@ -45,23 +45,23 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             let cols = row.cols;
             for (col_idx, (col, col_width)) in cols.into_iter().enumerate() {
                 let pad_width = col_widths[col_idx] - col_width;
-                match write!(handle, "{}{}", col, {
+                if write!(handle, "{}{}", col, {
                     let mut padding: String = String::with_capacity(pad_width + 1);
                     for _ in 0..pad_width {
                         padding.push(pad_char);
                     }
                     padding.push(pad_char);
                     padding
-                }) {
-                    Err(_) => break 'print,
-                    _ => {}
-                };
+                })
+                .is_err()
+                {
+                    break 'print;
+                }
             }
         }
-        match write!(handle, "{}", '\n') {
-            Err(_) => break 'print,
-            _ => {}
-        };
+        if writeln!(handle).is_err() {
+            break 'print;
+        }
     }
 
     Ok(())
